@@ -1,5 +1,7 @@
 # Referral System
-A referral system for any link, similar to [bit.ly](https://bitly.com/) with simple and easy to use API and interface.
+A referral system for any link, similar to [bit.ly](https://bitly.com/) with simple and easy to use API.
+
+This project uses [TypeScript](https://www.typescriptlang.org/). The database used is [SQLite](https://www.sqlite.org/index.html). [Express](https://expressjs.com/) is used as the web framework. [Sequelize](https://sequelize.org/) is used as the ORM.
 
 ## Features
 - [x] Create a user account for referral management
@@ -130,6 +132,50 @@ In case the referral link doesn't exist, the response will be:
     "error": "Invalid referral code"
 }
 ```
+
+## Installation
+Clone the repository:
+```bash
+git clone https://github.com/arnapchapagain/referral-system.git
+```
+cd to the directory:
+```bash
+cd referral-system
+```
+
+Install the dependencies:
+```bash
+npm install
+```
+
+This will install all the dependencies required for the project. Those are listed in the `package.json` file.
+
+## Running the project
+Create a `.env` file in the root directory and add the following:
+```env
+PORT=<port>
+DB_PATH=<database-file-name>.sql
+```
+
+For example:
+```env
+PORT=3000
+DB_PATH=database.sql
+```
+
+### Production
+To run the project, run the following command:
+```bash
+npm start
+```
+This will start the server on port 8080. You can change the port in the `index.js` file.
+
+### Development
+To run the project in development mode, run the following command:
+```bash
+npm run dev
+```
+This will start the server on your `PORT` value using `nodemon`. This means that the server will restart automatically when you make changes to the code.
 
 ## Todo
 - [ ] Track the number of UNIQUE clicks on your referral link
