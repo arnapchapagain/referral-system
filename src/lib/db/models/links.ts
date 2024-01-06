@@ -9,15 +9,15 @@ class Links extends Model {
     code!: string;
     redirectUrl!: string;
     views!: number;
-    createdBy!: number;
+    createdBy!: string;
 }
 
 // code varchar(8) PRIMARY KEY,
 // redirect_url TEXT NOT NULL,
 // views INTEGER NOT NULL,
-// created_by INTEGER NOT NULL,
+// created_by varchar(32) NOT NULL,
 // created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-// FOREIGN KEY (created_by) REFERENCES users(user_id)
+// FOREIGN KEY (created_by) REFERENCES users(username)
 
 Links.init({
     code: {
@@ -34,11 +34,11 @@ Links.init({
         allowNull: false
     },
     createdBy: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING(32),
         allowNull: false,
         references: {
             model: 'users',
-            key: 'user_id'
+            key: 'username'
         }
     }
   },{
