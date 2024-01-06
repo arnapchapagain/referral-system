@@ -65,4 +65,23 @@ router.post('/create', async (req: Request, res: Response) => {
     });
 });
 
+router.get('/stats', async (req: Request, res: Response) => {
+    let code = req.query.code;
+    if (code === undefined) {
+        return res.status(400).json({ error: "Parameter code is required" });
+    }
+    let link = await Links.findOne({
+        where: {
+            code: code
+        }
+    });
+    if (link === null) {
+        return res.status(404).json({ error: "Invalid referral code" });
+    }
+    res.status(200).json({ 
+        views: link.views,
+        redirect_url: link.redirectUrl 
+    });
+});
+
 export { router };
