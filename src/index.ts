@@ -3,6 +3,7 @@ import path from 'path';
 import dotenv from 'dotenv';
 import {router as referRouter} from './routes/refer';
 import {router as usersRouter} from './routes/users';
+import {router as statsRouter} from './routes/stats';
 
 import { sequelize, Users, Links } from './lib/db';
 
@@ -17,6 +18,7 @@ app.set('views', path.join(__dirname, '../views'));
 app.use(express.json());
 app.use('/refer', referRouter);
 app.use('/users', usersRouter);
+app.use('/stats', statsRouter);
 
 sequelize.authenticate().then(async () => {
     console.log('Connected to database!');
@@ -30,6 +32,14 @@ sequelize.authenticate().then(async () => {
 
 app.get('/', (req, res) => {
     res.render('index');
+});
+
+app.get('/:code', async (req, res) => {
+    let code = req.params.code;
+    if (code === undefined) {
+        return res.status(400).json({ error: "Parameter code is required" });
+    }
+    res.redirect('/refer?code=' + code);
 });
 
 // Start the server
