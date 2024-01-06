@@ -1,7 +1,17 @@
 import express, { Router, Request, Response } from 'express';
-import { Links } from '../lib/db';
+import { Links, Users } from '../lib/db';
 
 const router: Router = express.Router();
+let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+function genRandomCode(length: number){
+    let code = "";
+    for(let i = 0; i < length; i++){
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return code;
+
+}
 
 router.get('/', async (req: Request, res: Response) => {
     let code: any = req.query.code;
@@ -10,7 +20,7 @@ router.get('/', async (req: Request, res: Response) => {
     }
     let link: Links | null = await Links.findOne({
         where: {
-            createdBy: code
+            code: code
         }
     });
     if (link === null) {
@@ -18,6 +28,38 @@ router.get('/', async (req: Request, res: Response) => {
     }
     await link.increment('views');
     res.redirect(link.redirectUrl);
+});
+
+router.post('/create', async (req: Request, res: Response) => {
+    let username = req.body.username;
+    if (username === undefined) {
+        return res.status(400).json({ error: "Parameter username is required" });
+    }
+    let redirectUrl: string = req.body.redirect_url;
+    if (redirectUrl === undefined) {
+        return res.status(400).json({ error: "Parameter redirect_url is required" });
+    }
+
+    let user: Users | null = await Users.findOne({
+        where: {
+            username: username
+        }
+    });
+    if (user === null) {
+        return res.status(404).json({ error: "User not found!" });
+    }
+
+    let code = genRandomCode(8);
+    await Links.create({
+        code: code,
+        redirectUrl: redirectUrl,
+        views: 0,
+        createdBy: username
+    });
+    res.status(201).json({ 
+        status: 'Successfully created new refer code', 
+        code: code 
+    });
 });
 
 export { router };
