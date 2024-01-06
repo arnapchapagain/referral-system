@@ -2,6 +2,8 @@ import express from 'express';
 import path from 'path';
 import dotenv from 'dotenv';
 import {router as referRouter} from './routes/refer';
+import {router as usersRouter} from './routes/users';
+
 import { sequelize, Users, Links } from './lib/db';
 
 dotenv.config();
@@ -14,6 +16,7 @@ app.set('views', path.join(__dirname, '../views'));
 
 app.use(express.json());
 app.use('/refer', referRouter);
+app.use('/users', usersRouter);
 
 sequelize.authenticate().then(async () => {
     console.log('Connected to database!');
