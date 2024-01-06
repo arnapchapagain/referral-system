@@ -39,6 +39,9 @@ router.post('/create', async (req: Request, res: Response) => {
     if (redirectUrl === undefined) {
         return res.status(400).json({ error: "Parameter redirect_url is required" });
     }
+    if (!redirectUrl.startsWith("http://") && !redirectUrl.startsWith("https://")) {
+        return res.status(400).json({ error: "Parameter redirect_url must be a valid URL" });
+    }
 
     let user: Users | null = await Users.findOne({
         where: {
